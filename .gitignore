@@ -1,0 +1,126 @@
+# Created by <https://www.gitignore.io/api/java%2Cintellij%2Cgradle%2Cmaven%2Cscala>
+# Edit at <https://www.gitignore.io/?templates=java,intellij,gradle,maven,scala>
+
+### Gradle ###
+.gradle
+/build/
+!gradle/wrapper/gradle-wrapper.jar
+
+### Intellij ###
+# Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and WebStorm
+# Reference: <https://intellij-support.jetbrains.com/hc/en-us/articles/206544839>
+
+# User-specific stuff
+.idea/**/workspace.xml
+.idea/**/tasks.xml
+.idea/dictionaries
+.idea/shelf
+.idea/vcs.xml
+.idea/www
+.idea/classpath.xml
+.idea/codeStyles
+.idea/dataSources.ids
+.idea/dataSources.xml
+.idea/jsLibraryMappings.xml
+.idea/modules.xml
+.idea/scopes/scope_settings.xml
+.idea/datasources.xml
+.idea/sqlDataSources.xml
+.idea/dynamic.xml
+.idea/uiDesigner.xml
+
+# Sensitive or high-churn files
+.idea/**/dataSources/
+.idea/**/dataSources.ids
+.idea/**/dataSources.xml
+.idea/**/dataSources.local.xml
+.idea/**/sqlDataSources.xml
+.idea/**/dynamic.xml
+.idea/**/uiDesigner.xml
+.idea/**/dbnavigator.xml
+
+### Maven ###
+target/
+pom.xml.tag
+pom.xml.releaseBackup
+pom.xml.versionsBackup
+pom.xml.next
+release.properties
+dependency-reduced-pom.xml
+buildNumber.properties
+.mvn/timing.properties
+
+# Avoid ignoring Maven wrapper jar file (.jar files are usually ignored)
+!/.mvn/wrapper/maven-wrapper.jar
+
+### Scala ###
+/target/
+lib_managed/
+src_managed/
+project/boot/
+project/plugins/project/
+.cache-main
+.cache-test
+dist/
+export/
+test-reports/
+.idea_modules/
+.idea_libs/
+
+### Java ###
+# Compiled class file
+*.class
+
+# Log file
+*.log
+
+# BlueJ files
+*.ctxt
+
+# Mobile Tools for Java (J2ME)
+.mtj.tmp/
+
+# Package Files #
+*.jar
+*.war
+*.ear
+*.zip
+*.tar.gz
+*.rar
+
+# IntelliJ project files
+*.iml
+*.ipr
+*.iws
+.idea/
+.idea/
+*.ipr
+*.iml
+*.iws
+out/
+.idea_modules/
+.classpath
+.project
+.settings/
+*.launch
+*.tld
+.metadata
+*.jsp
+
+# Eclipse project files
+*.classpath
+*.project
+*.settings/
+*.tld
+
+# NetBeans project files
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+nbactions.xml
+nb-configuration.xml
+
+# VS Code files
+.vscode/
