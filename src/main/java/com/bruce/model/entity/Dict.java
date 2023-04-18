@@ -11,7 +11,6 @@ import java.util.Date;
 
 /**
  * 词库
- * @TableName dict
  */
 @TableName("dict")
 @Data

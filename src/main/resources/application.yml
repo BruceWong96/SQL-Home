@@ -1,0 +1,52 @@
+spring:
+  # Spring 应用程序的名称
+  application:
+    name: sql-home-backend
+  # 默认 dev 环境
+  profiles:
+    active: dev
+  # 支持 swagger3
+  mvc:
+    pathmatch:
+      # 指定 Spring MVC 路径匹配策略为 AntPathMatcher
+      matching-strategy: ant_path_matcher
+  # 数据库配置
+  datasource:
+    # 数据库驱动类名
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    # 数据库连接 URL
+    url: jdbc:mysql://localhost:3306/sqlhome
+    # 数据库用户名
+    username: root
+    # 数据库密码
+    password: 123456
+server:
+  # 应用程序绑定的 IP 地址，此处为绑定到所有网络接口
+  address: 0.0.0.0
+  # 应用程序监听的端口号，此处为 8102
+  port: 8102
+  servlet:
+    # 应用程序的根路径，此处为 /api
+    context-path: /api
+    session:
+      # session 过期时间，此处为 30 天
+      timeout: "P30D"
+      cookie:
+        # cookie 的 SameSite 属性，此处为 none
+        same-site: none
+        # cookie 的 Secure 属性，此处为 true
+        secure: true
+mybatis-plus:
+  configuration:
+    # 配置下划线转驼峰命名规则
+    map-underscore-to-camel-case: false
+    # 配置 MyBatis 的日志输出策略，此处为 org.apache.ibatis.logging.stdout.StdOutImpl
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+  global-config:
+    db-config:
+      # 配置逻辑删除的字段名，此处为 isDelete
+      logic-delete-field: isDelete
+      # 配置逻辑删除的值，此处为 1
+      logic-delete-value: 1
+      # 配置未删除的值，此处为 0
+      logic-not-delete-value: 0
