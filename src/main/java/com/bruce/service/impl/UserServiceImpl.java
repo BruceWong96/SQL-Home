@@ -16,6 +16,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 
 import static com.bruce.constant.UserConstant.USER_LOGIN_STATUS;
+import static com.bruce.constant.UserConstant.ADMIN_ROLE;
 
 /**
  * @author Bruce
@@ -110,16 +111,29 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
         if (currentUser == null || currentUser.getId() == null) {
             throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR, "用户未登录");
         }
-        return null;
+        // 从数据库查询用户信息
+        long userId = currentUser.getId();
+        currentUser = this.getById(userId);
+        if (currentUser == null) {
+            throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR, "用户未登录");
+        }
+        return currentUser;
     }
 
     @Override
     public boolean isAdmin(HttpServletRequest request) {
-        return false;
+        // 仅管理员可以查询
+        Object usrObj = request.getSession().getAttribute(USER_LOGIN_STATUS);
+        User user = (User) usrObj;
+        return user != null && ADMIN_ROLE.equals(user.getUserRole());
     }
 
     @Override
     public boolean userLogout(HttpServletRequest request) {
-        return false;
+        if (request.getSession().getAttribute(USER_LOGIN_STATUS) == null) {
+            throw new BusinessException(ErrorCode.NOT_LOGIN_ERROR, "用户未登录");
+        }
+        request.getSession().removeAttribute(USER_LOGIN_STATUS);
+        return true;
     }
 }
