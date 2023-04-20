@@ -1,5 +1,8 @@
 package com.bruce.controller;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.baomidou.mybatisplus.extension.plugins.pagination.PageDTO;
 import com.bruce.annotation.AuthCheck;
 import com.bruce.common.BaseResponse;
 import com.bruce.common.DeleteRequest;
@@ -7,9 +10,7 @@ import com.bruce.common.ErrorCode;
 import com.bruce.common.ResultUtils;
 import com.bruce.constant.UserConstant;
 import com.bruce.exception.BusinessException;
-import com.bruce.model.dto.UserAddRequest;
-import com.bruce.model.dto.UserLoginRequest;
-import com.bruce.model.dto.UserRegisterRequest;
+import com.bruce.model.dto.*;
 import com.bruce.model.entity.User;
 import com.bruce.model.vo.UserVO;
 import com.bruce.service.UserService;
@@ -19,6 +20,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * 用户接口
@@ -132,6 +135,81 @@ public class UserController {
         return ResultUtils.success(result);
     }
 
+    /**
+     * 更新用户
+     */
+    @PostMapping("/update")
+    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    public BaseResponse<Boolean> updateUser(@RequestBody UserUpdateRequest userUpdateRequest, HttpServletRequest request) {
+        if (userUpdateRequest == null || userUpdateRequest.getId() == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        User user = new User();
+        BeanUtils.copyProperties(userUpdateRequest, user);
+        boolean result = userService.updateById(user);
+        return ResultUtils.success(result);
+    }
+
+    /**
+     * 根据 id 获取用户
+     */
+    @GetMapping("/get")
+    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    public BaseResponse<UserVO> getUserById(int id, HttpServletRequest request) {
+        if (id <= 0) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        User user = userService.getById(id);
+        UserVO userVO = new UserVO();
+        BeanUtils.copyProperties(user, userVO);
+        return ResultUtils.success(userVO);
+    }
+
+    /**
+     * 获取用户列表
+     */
+    @GetMapping("/list")
+    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    public BaseResponse<List<UserVO>> listUser(UserQueryRequest userQueryRequest, HttpServletRequest request) {
+        User userQuery = new User();
+        if (userQueryRequest != null) {
+            BeanUtils.copyProperties(userQueryRequest, userQuery);
+        }
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>(userQuery);
+        List<User> userList = userService.list(queryWrapper);
+        List<UserVO> userVOList = userList.stream().map(user -> {
+            UserVO userVO = new UserVO();
+            BeanUtils.copyProperties(user, userVO);
+            return userVO;
+        }).collect(Collectors.toList());
+        return ResultUtils.success(userVOList);
+    }
+
+    /**
+     * 分页获取用户列表
+     */
+    @GetMapping("/list/page")
+    @AuthCheck(mustRole = UserConstant.ADMIN_ROLE)
+    public BaseResponse<Page<UserVO>> listUserPage(UserQueryRequest userQueryRequest, HttpServletRequest request) {
+        long current = 1;
+        long size = 10;
+        User userQuery = new User();
+        if (userQueryRequest != null) {
+            BeanUtils.copyProperties(userQueryRequest, userQuery);
+            current = userQueryRequest.getCurrent();
+            size = userQueryRequest.getSize();
+        }
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>(userQuery);
+        Page<User> userPage = userService.page(new Page<>(current, size), queryWrapper);
+        Page<UserVO> userVOPage = new PageDTO<>(userPage.getCurrent(), userPage.getSize(), userPage.getTotal());
+        List<UserVO> userVOList = userPage.getRecords().stream().map(user -> {
+            UserVO userVO = new UserVO();
+            BeanUtils.copyProperties(user, userVO);
+            return userVO;
+        }).collect(Collectors.toList());
+        userVOPage.setRecords(userVOList);
+        return ResultUtils.success(userVOPage);
+    }
 
     // endregion 增删改查
 
