@@ -19,7 +19,7 @@ spring:
     # 数据库用户名
     username: root
     # 数据库密码
-    password: 123456
+    password: root123456
 server:
   # 应用程序绑定的 IP 地址，此处为绑定到所有网络接口
   address: 0.0.0.0
