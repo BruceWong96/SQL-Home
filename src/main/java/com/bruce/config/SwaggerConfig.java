@@ -40,6 +40,7 @@ public class SwaggerConfig {
         return new ApiInfoBuilder()
                 .title("SQL-Home")
                 .version("1.0")
+                .description("All in SQL.")
                 .build();
     }
 }
