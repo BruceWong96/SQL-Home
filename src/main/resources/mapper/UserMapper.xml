@@ -5,7 +5,7 @@
 <mapper namespace="com.bruce.mapper.UserMapper">
     
     <resultMap id="BaseResultMap" type="com.bruce.model.entity.User">
-        <id property="id" column="id" javaType="BIGINT" />
+        <id property="id" column="id" jdbcType="BIGINT" />
         <result property="userName" column="userName" jdbcType="VARCHAR"/>
         <result property="userAccount" column="userAccount" jdbcType="VARCHAR"/>
         <result property="userAvatar" column="userAvatar" jdbcType="VARCHAR"/>

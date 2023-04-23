@@ -14,6 +14,8 @@ import com.bruce.model.dto.*;
 import com.bruce.model.entity.User;
 import com.bruce.model.vo.UserVO;
 import com.bruce.service.UserService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +31,7 @@ import java.util.stream.Collectors;
  * @author Bruce Wong
  * @date 2023年04月18日 23:54
  */
+@Api(tags = "用户接口")
 @RestController
 @RequestMapping("/user")
 public class UserController {
@@ -40,6 +43,7 @@ public class UserController {
     /**
      * 用户注册
      */
+    @ApiOperation(value = "用户注册")
     @PostMapping("/register")
     public BaseResponse<Long> userRegister(@RequestBody UserRegisterRequest userRegisterRequest) {
         if (userRegisterRequest == null) {
@@ -59,6 +63,7 @@ public class UserController {
     /**
      * 用户登录
      */
+    @ApiOperation(value = "用户登录")
     @PostMapping("/login")
     public BaseResponse<User> userLogin(@RequestBody UserLoginRequest userLoginRequest, HttpServletRequest request) {
         if (userLoginRequest == null) {
