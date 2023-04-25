@@ -10,7 +10,7 @@
         <module name="SQL-Home" />
       </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel>
+    <bytecodeTargetLevel target="8">
       <module name="SQL-Home" target="1.8" />
     </bytecodeTargetLevel>
   </component>
