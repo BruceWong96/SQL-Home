@@ -1,11 +1,13 @@
 package com.bruce.core.builder;
 
 import com.alibaba.excel.util.StringUtils;
+import com.bruce.common.ErrorCode;
 import com.bruce.core.builder.sql.MySQLDialect;
 import com.bruce.core.builder.sql.SQLDialect;
 import com.bruce.core.builder.sql.SQLDialectFactory;
 import com.bruce.core.schema.TableSchema;
 import com.bruce.core.schema.TableSchema.Field;
+import com.bruce.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
@@ -63,8 +65,32 @@ public class SQLBuilder {
         int filedSize = fieldList.size();
         for (int i = 0; i < filedSize; i++) {
             Field field = fieldList.get(i);
-
+            fieldStrBuilder.append(buildCreateFieldSQL(field));
+            // 最后一个字段不需要逗号和换行
         }
+
+        return null;
+    }
+
+    /**
+     * 生成创建字段的 SQL
+     *
+     * @param field
+     * @return
+     */
+    private String buildCreateFieldSQL(Field field) {
+        if (field == null) {
+            throw new BusinessException(ErrorCode.PARAMS_ERROR);
+        }
+        String fieldName = sqlDialect.wrapFieldName(field.getFieldName());
+        String fieldType = field.getFieldType();
+        String defaultValue = field.getDefaultValue();
+        boolean notNull = field.isNotNull();
+        String comment = field.getComment();
+
+
+
+
 
         return null;
     }
