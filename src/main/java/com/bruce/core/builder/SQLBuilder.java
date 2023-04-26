@@ -5,12 +5,14 @@ import com.bruce.common.ErrorCode;
 import com.bruce.core.builder.sql.MySQLDialect;
 import com.bruce.core.builder.sql.SQLDialect;
 import com.bruce.core.builder.sql.SQLDialectFactory;
+import com.bruce.core.model.enums.FieldTypeEnum;
 import com.bruce.core.schema.TableSchema;
 import com.bruce.core.schema.TableSchema.Field;
 import com.bruce.exception.BusinessException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * SQL 生成器
@@ -87,13 +89,78 @@ public class SQLBuilder {
         String defaultValue = field.getDefaultValue();
         boolean notNull = field.isNotNull();
         String comment = field.getComment();
-
-
-
-
-
-        return null;
+        String onUpdate = field.getOnUpdate();
+        boolean primaryKey = field.isPrimaryKey();
+        boolean autoIncrement = field.isAutoIncrement();
+        // e.g. column_name int default 0 not null auto_increment comment '注释' primary key,
+        StringBuilder fieldStrBuilder = new StringBuilder();
+        // 字段名
+        fieldStrBuilder.append(fieldName);
+        // 字段类型
+        fieldStrBuilder.append(" ").append(fieldType);
+        // 默认值
+        if (StringUtils.isNotBlank(defaultValue)) {
+            fieldStrBuilder.append(" default ").append(getValueStr(field, defaultValue));
+        }
+        // 是否非空
+        fieldStrBuilder.append(" ").append(notNull ? "not null" : "null");
+        // 是否自增
+        if (autoIncrement) {
+            fieldStrBuilder.append(" auto_increment");
+        }
+        // 附加条件
+        if (StringUtils.isNotBlank(onUpdate)) {
+            fieldStrBuilder.append(" on update ").append(onUpdate);
+        }
+        // 注释
+        if (StringUtils.isNotBlank(comment)) {
+            fieldStrBuilder.append(" comment ").append(comment);
+        }
+        // 是否为主键
+        if (primaryKey) {
+            fieldStrBuilder.append(" primary key");
+        }
+        return fieldStrBuilder.toString();
     }
 
+    /**
+     * 构造插入数据 SQL
+     *
+     * @param field
+     * @param value
+     * @return
+     */
 
+
+    public static String getValueStr(Field field, Object value) {
+        if (field == null || value == null) {
+            return "''";
+        }
+        FieldTypeEnum fieldTypeEnum = Optional.ofNullable(FieldTypeEnum.getEnumByValue(field.getFieldType())).orElse(FieldTypeEnum.TEXT);
+
+        String result = String.valueOf(value);
+
+        switch (fieldTypeEnum) {
+            case DATETIME:
+            case TIMESTAMP:
+                return result.equalsIgnoreCase("CURRENT_TIMESTAMP") ? result : String.format("'%s'", result);
+            case DATE:
+            case TIME:
+            case CHAR:
+            case VARCHAR:
+            case TINYTEXT:
+            case TEXT:
+            case MEDIUMTEXT:
+            case LONGTEXT:
+            case TINYBLOB:
+            case BLOB:
+            case MEDIUMBLOB:
+            case LONGBLOB:
+            case BINARY:
+            case VARBINARY:
+                return String.format("'%s'", value);
+            default:
+                return result;
+        }
+    }
 }
